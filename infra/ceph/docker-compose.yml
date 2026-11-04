@@ -1,0 +1,93 @@
+name: ceph
+
+services:
+  ceph-mon:
+    image: quay.io/ceph/ceph@sha256:8d438f810ac1a2f582e7a7267daf9f0b7e10bff30071f246f2e03e932add39d3
+    container_name: ceph-mon
+    env_file:
+      - ceph.env
+    entrypoint: ["bash", "/entrypoint.sh", "mon"]
+    volumes:
+      - ./entrypoint.sh:/entrypoint.sh:ro
+      - ceph-config:/etc/ceph
+      - ceph-data:/var/lib/ceph
+    ports:
+      - "127.0.0.1:6789:6789"
+      - "127.0.0.1:3300:3300"
+    healthcheck:
+      test: ["CMD-SHELL", "ceph --connect-timeout 5 -s >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 30s
+    networks:
+      - thesis-net
+
+  ceph-mgr:
+    image: quay.io/ceph/ceph@sha256:8d438f810ac1a2f582e7a7267daf9f0b7e10bff30071f246f2e03e932add39d3
+    container_name: ceph-mgr
+    env_file:
+      - ceph.env
+    entrypoint: ["bash", "/entrypoint.sh", "mgr"]
+    volumes:
+      - ./entrypoint.sh:/entrypoint.sh:ro
+      - ceph-config:/etc/ceph
+      - ceph-data:/var/lib/ceph
+    depends_on:
+      ceph-mon:
+        condition: service_healthy
+    networks:
+      - thesis-net
+
+  ceph-osd:
+    image: quay.io/ceph/ceph@sha256:8d438f810ac1a2f582e7a7267daf9f0b7e10bff30071f246f2e03e932add39d3
+    container_name: ceph-osd
+    env_file:
+      - ceph.env
+    entrypoint: ["bash", "/entrypoint.sh", "osd"]
+    volumes:
+      - ./entrypoint.sh:/entrypoint.sh:ro
+      - ceph-config:/etc/ceph
+      - ceph-data:/var/lib/ceph
+    depends_on:
+      ceph-mon:
+        condition: service_healthy
+    networks:
+      - thesis-net
+
+  ceph-rgw:
+    image: quay.io/ceph/ceph@sha256:8d438f810ac1a2f582e7a7267daf9f0b7e10bff30071f246f2e03e932add39d3
+    container_name: ceph-rgw
+    env_file:
+      - ceph.env
+    entrypoint: ["bash", "/entrypoint.sh", "rgw"]
+    volumes:
+      - ./entrypoint.sh:/entrypoint.sh:ro
+      - ceph-config:/etc/ceph
+      - ceph-data:/var/lib/ceph
+    ports:
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          ceph --connect-timeout 5 health 2>/dev/null | grep -qE 'HEALTH_OK|HEALTH_WARN'
+          && ceph --connect-timeout 5 osd stat 2>/dev/null | grep -qE '[1-9][0-9]* up'
+          && timeout 3 bash -c '</dev/tcp/127.0.0.1/8000'
+      interval: 10s
+      timeout: 15s
+      retries: 40
+      start_period: 45s
+    depends_on:
+      ceph-mon:
+        condition: service_healthy
+    networks:
+      - thesis-net
+
+networks:
+  thesis-net:
+    external: true
+
+volumes:
+  ceph-data:
+  ceph-config:

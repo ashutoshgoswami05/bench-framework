@@ -1,0 +1,7 @@
+backend,mean_memory_MB,peak_memory_MB,mean_cpu_cores,peak_cpu_cores,cpu_seconds,peak_swap_MB,window_seconds,memory_samples,cpu_samples
+rustfs,418.66,536.16,0.3557,0.5347,17.42,0.0,34,7,7
+garage,540.13,1116.83,0.4812,0.7805,22.25,0.0,29,6,6
+seaweedfs,808.37,1011.62,0.1792,0.2335,19.16,0.0,94,19,19
+juicefs,1776.22,3060.45,0.2419,0.4895,13.36,0.0,39,8,8
+minio,768.76,1573.94,0.2589,0.4164,11.31,0.0,28,6,6
+ceph,771.33,956.66,0.3143,0.4433,22.48,0.0,61,13,13

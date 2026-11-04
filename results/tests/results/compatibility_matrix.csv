@@ -1,0 +1,108 @@
+backend,feature,supported,detail
+ceph,signature_verification,True,rejected with SignatureDoesNotMatch
+ceph,object_put_get_delete,True,put/get/delete round-trip and post-delete NoSuchKey both correct
+ceph,empty_object_support,True,zero-byte object uploaded and read back correctly
+ceph,special_character_keys,True,key with spaces/parentheses/#/! handled correctly
+ceph,custom_metadata_roundtrip,True,custom x-amz-meta-* headers round-tripped correctly
+ceph,multipart_upload,True,create/upload-parts/complete produced a correctly assembled object
+ceph,multipart_upload_abort,True,aborted upload correctly left no object behind
+ceph,error_nosuchbucket_compliance,True,NoSuchBucket + HTTP 404 returned for a nonexistent bucket
+ceph,error_nosuchkey_compliance,True,NoSuchKey + HTTP 404 returned for a nonexistent key
+ceph,error_delete_nonexistent_bucket_compliance,True,NoSuchBucket returned when deleting a bucket that doesn't exist
+ceph,bucket_versioning,True,superseded version retrievable by id: True
+ceph,object_tagging,True,get_object_tagging returned {'project': 'thesis'}
+ceph,bucket_policy,True,policy round-tripped; anonymous GET returned HTTP 200
+ceph,object_lock,True,delete of the retained version refused with AccessDenied
+ceph,cors_configuration,True,"rule stored; preflight HTTP 200, Access-Control-Allow-Origin='https://example.org'"
+ceph,sse_s3,False,InvalidRequest: None
+ceph,presigned_url,True,"valid HTTP 200, tampered HTTP 403, expired HTTP 403"
+ceph,legacy_sigv2_auth,True,botocore signer: SignatureDoesNotMatch; independent signer: HTTP 200
+rustfs,signature_verification,True,rejected with SignatureDoesNotMatch
+rustfs,object_put_get_delete,True,put/get/delete round-trip and post-delete NoSuchKey both correct
+rustfs,empty_object_support,True,zero-byte object uploaded and read back correctly
+rustfs,special_character_keys,True,key with spaces/parentheses/#/! handled correctly
+rustfs,custom_metadata_roundtrip,True,custom x-amz-meta-* headers round-tripped correctly
+rustfs,multipart_upload,True,create/upload-parts/complete produced a correctly assembled object
+rustfs,multipart_upload_abort,True,aborted upload correctly left no object behind
+rustfs,error_nosuchbucket_compliance,True,NoSuchBucket + HTTP 404 returned for a nonexistent bucket
+rustfs,error_nosuchkey_compliance,True,NoSuchKey + HTTP 404 returned for a nonexistent key
+rustfs,error_delete_nonexistent_bucket_compliance,True,NoSuchBucket returned when deleting a bucket that doesn't exist
+rustfs,bucket_versioning,True,superseded version retrievable by id: True
+rustfs,object_tagging,True,get_object_tagging returned {'project': 'thesis'}
+rustfs,bucket_policy,True,policy round-tripped; anonymous GET returned HTTP 200
+rustfs,object_lock,True,delete of the retained version refused with AccessDenied
+rustfs,cors_configuration,True,"rule stored; preflight HTTP 200, Access-Control-Allow-Origin='https://example.org'"
+rustfs,sse_s3,True,SSE-S3 (AES256): head_object ServerSideEncryption='AES256'
+rustfs,presigned_url,True,"valid HTTP 200, tampered HTTP 403, expired HTTP 403"
+rustfs,legacy_sigv2_auth,True,botocore signer: SignatureDoesNotMatch; independent signer: HTTP 200
+garage,signature_verification,True,rejected with AccessDenied
+garage,object_put_get_delete,True,put/get/delete round-trip and post-delete NoSuchKey both correct
+garage,empty_object_support,True,zero-byte object uploaded and read back correctly
+garage,special_character_keys,True,key with spaces/parentheses/#/! handled correctly
+garage,custom_metadata_roundtrip,True,custom x-amz-meta-* headers round-tripped correctly
+garage,multipart_upload,True,create/upload-parts/complete produced a correctly assembled object
+garage,multipart_upload_abort,True,aborted upload correctly left no object behind
+garage,error_nosuchbucket_compliance,True,NoSuchBucket + HTTP 404 returned for a nonexistent bucket
+garage,error_nosuchkey_compliance,True,NoSuchKey + HTTP 404 returned for a nonexistent key
+garage,error_delete_nonexistent_bucket_compliance,True,NoSuchBucket returned when deleting a bucket that doesn't exist
+garage,bucket_versioning,False,NotImplemented: Unimplemented action: PutBucketVersioning
+garage,object_tagging,False,NotImplemented: Unimplemented action: PutObjectTagging
+garage,bucket_policy,False,NotImplemented: Unimplemented action: PutBucketPolicy
+garage,object_lock,False,NotImplemented: Unimplemented action: PutObjectLockConfiguration
+garage,cors_configuration,True,"rule stored; preflight HTTP 200, Access-Control-Allow-Origin='*'"
+garage,sse_s3,False,SSE-S3 (AES256): head_object ServerSideEncryption=None
+garage,presigned_url,True,"valid HTTP 200, tampered HTTP 403, expired HTTP 400"
+garage,legacy_sigv2_auth,False,botocore signer: InvalidRequest; independent signer: HTTP 400
+seaweedfs,signature_verification,True,rejected with SignatureDoesNotMatch
+seaweedfs,object_put_get_delete,True,put/get/delete round-trip and post-delete NoSuchKey both correct
+seaweedfs,empty_object_support,True,zero-byte object uploaded and read back correctly
+seaweedfs,special_character_keys,True,key with spaces/parentheses/#/! handled correctly
+seaweedfs,custom_metadata_roundtrip,True,custom x-amz-meta-* headers round-tripped correctly
+seaweedfs,multipart_upload,True,create/upload-parts/complete produced a correctly assembled object
+seaweedfs,multipart_upload_abort,True,aborted upload correctly left no object behind
+seaweedfs,error_nosuchbucket_compliance,True,NoSuchBucket + HTTP 404 returned for a nonexistent bucket
+seaweedfs,error_nosuchkey_compliance,True,NoSuchKey + HTTP 404 returned for a nonexistent key
+seaweedfs,error_delete_nonexistent_bucket_compliance,True,NoSuchBucket returned when deleting a bucket that doesn't exist
+seaweedfs,bucket_versioning,True,superseded version retrievable by id: True
+seaweedfs,object_tagging,True,get_object_tagging returned {'project': 'thesis'}
+seaweedfs,bucket_policy,True,policy round-tripped; anonymous GET returned HTTP 200
+seaweedfs,object_lock,True,delete of the retained version refused with AccessDenied
+seaweedfs,cors_configuration,True,"rule stored; preflight HTTP 200, Access-Control-Allow-Origin='https://example.org'"
+seaweedfs,sse_s3,False,"InternalError: We encountered an internal error, please try again."
+seaweedfs,presigned_url,True,"valid HTTP 200, tampered HTTP 403, expired HTTP 403"
+seaweedfs,legacy_sigv2_auth,True,botocore signer: SignatureDoesNotMatch; independent signer: HTTP 200
+juicefs,signature_verification,True,rejected with SignatureDoesNotMatch
+juicefs,object_put_get_delete,True,put/get/delete round-trip and post-delete NoSuchKey both correct
+juicefs,empty_object_support,True,zero-byte object uploaded and read back correctly
+juicefs,special_character_keys,True,key with spaces/parentheses/#/! handled correctly
+juicefs,multipart_upload,True,create/upload-parts/complete produced a correctly assembled object
+juicefs,multipart_upload_abort,True,aborted upload correctly left no object behind
+juicefs,error_nosuchbucket_compliance,True,NoSuchBucket + HTTP 404 returned for a nonexistent bucket
+juicefs,error_nosuchkey_compliance,True,NoSuchKey + HTTP 404 returned for a nonexistent key
+juicefs,error_delete_nonexistent_bucket_compliance,True,NoSuchBucket returned when deleting a bucket that doesn't exist
+juicefs,bucket_versioning,False,NotImplemented: A header you provided implies functionality that is not implemented
+juicefs,object_tagging,False,NotImplemented: A header you provided implies functionality that is not implemented
+juicefs,bucket_policy,False,NotImplemented: A header you provided implies functionality that is not implemented
+juicefs,object_lock,False,501: Not Implemented
+juicefs,cors_configuration,False,NotImplemented: A header you provided implies functionality that is not implemented
+juicefs,sse_s3,False,NotImplemented: A header you provided implies functionality that is not implemented
+juicefs,presigned_url,True,"valid HTTP 200, tampered HTTP 403, expired HTTP 403"
+juicefs,legacy_sigv2_auth,True,botocore signer: SignatureDoesNotMatch; independent signer: HTTP 200
+minio,signature_verification,True,rejected with SignatureDoesNotMatch
+minio,object_put_get_delete,True,put/get/delete round-trip and post-delete NoSuchKey both correct
+minio,empty_object_support,True,zero-byte object uploaded and read back correctly
+minio,special_character_keys,True,key with spaces/parentheses/#/! handled correctly
+minio,custom_metadata_roundtrip,True,custom x-amz-meta-* headers round-tripped correctly
+minio,multipart_upload,True,create/upload-parts/complete produced a correctly assembled object
+minio,multipart_upload_abort,True,aborted upload correctly left no object behind
+minio,error_nosuchbucket_compliance,True,NoSuchBucket + HTTP 404 returned for a nonexistent bucket
+minio,error_nosuchkey_compliance,True,NoSuchKey + HTTP 404 returned for a nonexistent key
+minio,error_delete_nonexistent_bucket_compliance,True,NoSuchBucket returned when deleting a bucket that doesn't exist
+minio,bucket_versioning,True,superseded version retrievable by id: True
+minio,object_tagging,True,get_object_tagging returned {'project': 'thesis'}
+minio,bucket_policy,True,policy round-tripped; anonymous GET returned HTTP 200
+minio,object_lock,True,delete of the retained version refused with InvalidRequest
+minio,cors_configuration,False,NotImplemented: A header you provided implies functionality that is not implemented
+minio,sse_s3,True,SSE-S3 (AES256): head_object ServerSideEncryption='AES256'
+minio,presigned_url,True,"valid HTTP 200, tampered HTTP 403, expired HTTP 403"
+minio,legacy_sigv2_auth,True,botocore signer: SignatureDoesNotMatch; independent signer: HTTP 200

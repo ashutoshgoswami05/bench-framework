@@ -1,0 +1,48 @@
+name: juicefs
+
+services:
+  redis:
+    image: redis@sha256:e7723ff73d963f5cc6d9c4643ea3d989527a402a319239054e9472a7fb9219a2
+    container_name: juicefs-redis
+    volumes:
+      - juicefs-redis-data:/data
+    networks:
+      - thesis-net
+
+  juicefs-format:
+    image: juicedata/mount@sha256:7401035624a1cfe906355fc990685ead5722d41a6525dddee285ede2269e19d2
+    container_name: juicefs-format
+    depends_on:
+      - redis
+    volumes:
+      - juicefs-data:/data
+    command: ["juicefs", "format", "--storage", "file", "--bucket", "/data", "redis://juicefs-redis:6379/1", "thesisjfs"]
+    restart: "no"
+    networks:
+      - thesis-net
+
+  juicefs-gateway:
+    image: juicedata/mount@sha256:7401035624a1cfe906355fc990685ead5722d41a6525dddee285ede2269e19d2
+    container_name: juicefs-gateway
+    depends_on:
+      juicefs-format:
+        condition: service_completed_successfully
+    environment:
+      - MINIO_ROOT_USER=thesisjuiceaccess
+      - MINIO_ROOT_PASSWORD=thesisjuicesecret123
+    ports:
+      - "127.0.0.1:9004:9090"
+      - "127.0.0.1:9567:9567"
+    volumes:
+      - juicefs-data:/data
+    command: ["juicefs", "gateway", "--multi-buckets", "--keep-etag", "--metrics", "0.0.0.0:9567", "redis://juicefs-redis:6379/1", "0.0.0.0:9090"]
+    networks:
+      - thesis-net
+
+volumes:
+  juicefs-redis-data:
+  juicefs-data:
+
+networks:
+  thesis-net:
+    external: true

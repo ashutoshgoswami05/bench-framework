@@ -1,0 +1,64 @@
+name: seaweedfs
+
+services:
+  seaweedfs-master:
+    image: chrislusf/seaweedfs@sha256:52194fba4fecd0083c842158b3a902ba6e04a63619b2b0efcd08007bdb6a4602
+    container_name: seaweedfs-master
+    ports:
+      - "127.0.0.1:9333:9333"
+      - "127.0.0.1:9324:9324"
+    command: "master -ip=seaweedfs-master -ip.bind=0.0.0.0 -metricsPort=9324"
+    networks:
+      - thesis-net
+
+  seaweedfs-volume:
+    image: chrislusf/seaweedfs@sha256:52194fba4fecd0083c842158b3a902ba6e04a63619b2b0efcd08007bdb6a4602
+    container_name: seaweedfs-volume
+    ports:
+      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:9325:9325"
+    command: 'volume -ip=seaweedfs-volume -master="seaweedfs-master:9333" -ip.bind=0.0.0.0 -port=8080 -metricsPort=9325 -dir=/data'
+    volumes:
+      - seaweedfs-data:/data
+    depends_on:
+      - seaweedfs-master
+    networks:
+      - thesis-net
+
+  seaweedfs-filer:
+    image: chrislusf/seaweedfs@sha256:52194fba4fecd0083c842158b3a902ba6e04a63619b2b0efcd08007bdb6a4602
+    container_name: seaweedfs-filer
+    ports:
+      - "127.0.0.1:8888:8888"
+      - "127.0.0.1:9326:9326"
+    command: 'filer -ip=seaweedfs-filer -master="seaweedfs-master:9333" -ip.bind=0.0.0.0 -metricsPort=9326'
+    tty: true
+    stdin_open: true
+    depends_on:
+      - seaweedfs-master
+      - seaweedfs-volume
+    networks:
+      - thesis-net
+
+  seaweedfs-s3:
+    image: chrislusf/seaweedfs@sha256:52194fba4fecd0083c842158b3a902ba6e04a63619b2b0efcd08007bdb6a4602
+    container_name: seaweedfs-s3
+    ports:
+      - "127.0.0.1:8333:8333"
+      - "127.0.0.1:9327:9327"
+    volumes:
+      - ./s3.json:/etc/seaweedfs/s3.json:ro
+    command: 's3 -filer="seaweedfs-filer:8888" -ip.bind=0.0.0.0 -metricsPort=9327 -config=/etc/seaweedfs/s3.json'
+    depends_on:
+      - seaweedfs-master
+      - seaweedfs-volume
+      - seaweedfs-filer
+    networks:
+      - thesis-net
+
+volumes:
+  seaweedfs-data:
+
+networks:
+  thesis-net:
+    external: true

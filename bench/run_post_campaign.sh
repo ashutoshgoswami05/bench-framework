@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -u
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+echo "=== monitoring stack up ==="
+cd "$REPO/monitoring" || exit 1
+docker compose up -d >/dev/null 2>&1
+sleep 20
+
+echo "=== instrumented pass (5 repeats per workload) ==="
+cd "$REPO" || exit 1
+bash bench/run_monitored.sh 5
+
+echo "=== extracting resource figures ==="
+cd "$REPO" || exit 1
+"$REPO/.venv/bin/python" analysis/pull_metrics.py 2>&1 | tail -3
+
+echo "=== monitoring stack down ==="
+cd "$REPO/monitoring" || exit 1
+docker compose down >/dev/null 2>&1
+
+echo "=== cross-validation with warp ==="
+cd "$REPO" || exit 1
+bash bench/run_warp_all.sh
+
+echo "post-campaign passes finished"
